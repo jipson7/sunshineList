@@ -14,11 +14,11 @@ class ParseFile implements RecordLoader {
 	private String employerRegex = "<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">"
 		+ "([A-Za-z&,\\-/áéíóúô'’\\. ]+)";
 
-	private String lastNameRegex = "<td align=\"left\" valign=\"top\">([A-Z\\-áéíóúô'’ ]+)</td>";
+	private String lastNameRegex = "<td align=\"left\" valign=\"top\">([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?</td>";
 
-	private String firstNameRegex = "<td colspan=\"2\" align=\"left\" valign=\"top\">([A-Z\\-áéíóúô'’ ]+)</td>";
+	private String firstNameRegex = "<td colspan=\"2\" align=\"left\" valign=\"top\">([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?</td>";
 
-	private String jobRegex = "([A-Za-z&,\\-/áéíóúô'’\\. ]+) </span>&nbsp;/&nbsp;<span lang=\"fr_ca\">";
+	private String jobRegex = "([A-Za-z&,\\-/áéíóúô'’\\. ]+)</span>&nbsp;/&nbsp;<span lang=\"fr_ca\">";
 
 	private String incomeRegex = "<td align=\"right\" valign=\"top\">([$\\d,\\.]+)</td>";
 
