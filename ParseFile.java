@@ -9,9 +9,8 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
-	private String employerRegex = "<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">([A-Za-z& ]+)";
-
-	//private BufferedReader inputFile;
+	private String employerRegex = "<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">"
+		+ "([A-Za-z&,\\-/áéíóúô'’\\. ]+)";
 
 	public List<Record> load(String filename) throws Exception {
 
