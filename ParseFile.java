@@ -9,15 +9,15 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
-	private String employerRegexEN = "([A-Za-z ]+)";
+	private String employerRegexEN = "([A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáéíóúô'’\\. ]+)";
 
-	private String employerRegexFR = "[A-Za-z' ]+"; 
+	private String employerRegexFR = "[A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáéíóúô'’\\. ]+"; 
 
-	private String lastNameRegex = "([A-Z ]+)";
+	private String lastNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?";
 
-	private String firstNameRegex = "([A-Z ]+)"; 
+	private String firstNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?"; 
 
-	private String positionRegex = "([A-Za-z, ]+)";
+	private String positionRegex = "([A-Za-z&,\\-/áéíóúô'’\\. ]+)";
 
 	private String salaryRegex = "(\\$\\d?,?\\d{3,},\\d{3,}.\\d{2})"; 
 
@@ -46,6 +46,9 @@ class ParseFile implements RecordLoader {
 	private String endBlockRegex = "\\s*<\\/tr>\\s*";
 	
 	public List<Record> load(String filename) throws Exception {
+
+		//temp to check regex
+		System.out.println(codeBlockRegex);
 
 		List<Record> sunshineList = new ArrayList<Record>();
 
