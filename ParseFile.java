@@ -9,19 +9,39 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
-	private String sectorRegex = "<h1> Public Sector Salary Disclosure for 2013: Government of Ontario : ([A-Za-z ]+)</h1>";
+	private String employerRegexEN = "([A-Za-z ]+)";
 
-	private String employerRegex = "<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">"
-		+ "([A-Za-z&,\\-/áéíóúô'’\\. ]+)";
+	private String employerRegexFR = "[A-Za-z' ]+"; 
 
-	private String lastNameRegex = "<td align=\"left\" valign=\"top\">([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?</td>";
+	private String lastNameRegex = "([A-Z ]+)";
 
-	private String firstNameRegex = "<td colspan=\"2\" align=\"left\" valign=\"top\">([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?</td>";
+	private String firstNameRegex = "([A-Z ]+)"; 
 
-	private String jobRegex = "([A-Za-z&,\\-/áéíóúô'’\\. ]+)</span>&nbsp;/&nbsp;<span lang=\"fr_ca\">";
+	private String positionRegex = "([A-Za-z, ]+)";
 
-	private String incomeRegex = "<td align=\"right\" valign=\"top\">([$\\d,\\.]+)</td>";
+	private String salaryRegex = "(\\$\\d?,?\\d{3,},\\d{3,}.\\d{2})"; 
 
+	private String taxRegex = "(\\$\\d+.\\d{2})"; 
+
+	private String codeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
+		+ employerRegexEN 
+		+ "<\\/span>\\s*<span lang=\"fr_ca\">&nbsp;\\/&nbsp;\\s*" 
+		+ employerRegexFR
+		+ "<\\/span><\\/td>\\s*<td align=\"left\" valign=\"top\">" 
+		+ lastNameRegex
+		+ "<\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
+		+ firstNameRegex
+		+ "<\\/td>\\s*<td align=\"left\" valign=\"top\"><span lang=\"en\">\\s*" 
+		+ positionRegex
+		+ "<\\/span>.+\\s*<td align=\"right\" valign=\"top\">" 
+		+ salaryRegex 
+		+ "<\\/td>\\s*<td colspan=\"2\" align=\"right\" valign=\"top\">" 
+		+ taxRegex
+		+ "<\\/td>\\s*<\\/tr>\\s*";
+
+	private String startBlockRegex = "\\s*<tr>\\s*";
+	private String endBlockRegex = "\\s*<\\/tr>\\s*";
+	
 	public List<Record> load(String filename) throws Exception {
 
 		List<Record> sunshineList = new ArrayList<Record>();
@@ -30,103 +50,20 @@ class ParseFile implements RecordLoader {
 
 			BufferedReader inputFile = new BufferedReader(new FileReader(filename));			
 
-			Pattern sectorPattern = Pattern.compile(sectorRegex);
+			Pattern codeBlockPattern = Pattern.compile(codeBlockRegex);
 
-			Pattern employerPattern = Pattern.compile(employerRegex);
+			Pattern startBlockPattern = Pattern.compile(startBlockRegex);
 
-			Pattern lastPattern = Pattern.compile(lastNameRegex);
+			Pattern endBlockPattern = Pattern.compile(endBlockRegex);
 
-			Pattern firstPattern = Pattern.compile(firstNameRegex);
+			Matcher codeBlockMatcher, startBlockMatcher, endBlockMatcher;
 
-			Pattern jobPattern = Pattern.compile(jobRegex);
-
-			Pattern incomePattern = Pattern.compile(incomeRegex);
-
-			Matcher sectorMatcher, employerMatcher, lastMatcher, firstMatcher, jobMatcher, incomeMatcher;
-
-			String currentLine, currentSector, currentName;
-
-			currentLine = currentSector = currentName = "empty/failed";
-
-			Record currentRecord = null;
-
+			StringBuilder blockTest = new StringBuilder();
 
 			while ((currentLine = inputFile.readLine()) != null) {
 
-				sectorMatcher = sectorPattern.matcher(currentLine);	
-
-				if (sectorMatcher.find()) {
-
-					currentSector = sectorMatcher.group(1);
-
-					continue;
-
-				}
-
-									
-				employerMatcher = employerPattern.matcher(currentLine);
-
-				if (employerMatcher.find()) {
-
-					currentRecord = new Record();	
-
-					currentRecord.employer = employerMatcher.group(1);
-
-					currentRecord.sector = currentSector;
-
-					continue;
-
-				}
-
-				lastMatcher = lastPattern.matcher(currentLine);
-
-				if (lastMatcher.find()) {
-
-					currentName = lastMatcher.group(1);	
-
-					continue;
-
-				}
-
-				firstMatcher = firstPattern.matcher(currentLine);
-
-				if (firstMatcher.find()) {
-
-					currentName = currentName + "," + firstMatcher.group(1);
-
-					currentRecord.name = currentName;
-
-					continue;
-
-				}
-
-				jobMatcher = jobPattern.matcher(currentLine);
-
-				if (jobMatcher.find()) {
-
-					currentRecord.position = jobMatcher.group(1);
-
-					continue;
-
-				}
-
-				incomeMatcher = incomePattern.matcher(currentLine);
-
-				if (incomeMatcher.find()) {
-
-					String stringSalary = incomeMatcher.group(1);
-
-					stringSalary = stringSalary.replace("$", "");
-
-					stringSalary = stringSalary.replace(",", "");
-
-					currentRecord.salary = Float.parseFloat(stringSalary);
-
-					sunshineList.add(currentRecord);
-
-				}
-
-
+					
+				
 			}
 
 			inputFile.close();
@@ -141,6 +78,12 @@ class ParseFile implements RecordLoader {
 
 
 		return sunshineList;
+
+	}
+
+	private Record createRecord(String currentBlock) {
+
+		
 
 	}
 
