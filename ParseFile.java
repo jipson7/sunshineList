@@ -34,9 +34,9 @@ class ParseFile implements RecordLoader {
 
 			Pattern employerPattern = Pattern.compile(employerRegex);
 
-			Pattern lastPattern = Pattern.compile(lastNameRegex, Pattern.CASE_INSENSITIVE);
+			Pattern lastPattern = Pattern.compile(lastNameRegex);
 
-			Pattern firstPattern = Pattern.compile(firstNameRegex, Pattern.CASE_INSENSITIVE);
+			Pattern firstPattern = Pattern.compile(firstNameRegex);
 
 			Pattern jobPattern = Pattern.compile(jobRegex);
 
@@ -46,7 +46,7 @@ class ParseFile implements RecordLoader {
 
 			String currentLine, currentSector, currentName;
 
-			currentLine = currentSector = currentName = "";
+			currentLine = currentSector = currentName = "empty/failed";
 
 			Record currentRecord = null;
 
@@ -58,6 +58,8 @@ class ParseFile implements RecordLoader {
 				if (sectorMatcher.find()) {
 
 					currentSector = sectorMatcher.group(1);
+
+					continue;
 
 				}
 
@@ -72,6 +74,8 @@ class ParseFile implements RecordLoader {
 
 					currentRecord.sector = currentSector;
 
+					continue;
+
 				}
 
 				lastMatcher = lastPattern.matcher(currentLine);
@@ -80,15 +84,19 @@ class ParseFile implements RecordLoader {
 
 					currentName = lastMatcher.group(1);	
 
+					continue;
+
 				}
 
 				firstMatcher = firstPattern.matcher(currentLine);
 
 				if (firstMatcher.find()) {
 
-					currentName = currentName + ", " + firstMatcher.group(1);
+					currentName = currentName + "," + firstMatcher.group(1);
 
 					currentRecord.name = currentName;
+
+					continue;
 
 				}
 
@@ -97,6 +105,8 @@ class ParseFile implements RecordLoader {
 				if (jobMatcher.find()) {
 
 					currentRecord.position = jobMatcher.group(1);
+
+					continue;
 
 				}
 
@@ -112,9 +122,10 @@ class ParseFile implements RecordLoader {
 
 					currentRecord.salary = Float.parseFloat(stringSalary);
 
+					sunshineList.add(currentRecord);
+
 				}
 
-				sunshineList.add(currentRecord);
 
 			}
 

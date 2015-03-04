@@ -2,7 +2,7 @@
 javaTestFiles/
 
 ### Big Data Files ###
-data/
+data/output.txt
 
 ### Vim ###
 [._]*.s[a-w][a-z]

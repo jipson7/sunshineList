@@ -14,9 +14,11 @@ public class parseDriver {
 
 			List<Record> sunshineList = driver.load(filePath);
 
+			System.out.println("The # of records is: " + sunshineList.size());
+
 			for (Record x : sunshineList) {
 
-				System.out.println(x.employer);
+				System.out.println(x.name + ", " + Float.toString(x.salary) + ", " + x.employer);
 
 			}
 
