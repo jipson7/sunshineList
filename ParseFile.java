@@ -39,6 +39,9 @@ class ParseFile implements RecordLoader {
 		+ taxRegex
 		+ "<\\/td>\\s*<\\/tr>\\s*";
 
+
+	private Pattern codeBlockPattern = Pattern.compile(codeBlockRegex);
+
 	private String startBlockRegex = "\\s*<tr>\\s*";
 	private String endBlockRegex = "\\s*<\\/tr>\\s*";
 	
@@ -50,19 +53,45 @@ class ParseFile implements RecordLoader {
 
 			BufferedReader inputFile = new BufferedReader(new FileReader(filename));			
 
-			Pattern codeBlockPattern = Pattern.compile(codeBlockRegex);
-
 			Pattern startBlockPattern = Pattern.compile(startBlockRegex);
 
 			Pattern endBlockPattern = Pattern.compile(endBlockRegex);
 
-			Matcher codeBlockMatcher, startBlockMatcher, endBlockMatcher;
+			Matcher startBlockMatcher, endBlockMatcher;
 
 			StringBuilder blockTest = new StringBuilder();
 
+			String currentLine = "";
+
 			while ((currentLine = inputFile.readLine()) != null) {
 
-					
+				startBlockMatcher = startBlockPattern.matcher(currentLine);						
+
+				if (startBlockMatcher.find()) {
+
+					blockTest.append(currentLine);
+
+					while ((currentLine = inputFile.readLine()) != null) {
+
+						endBlockMatcher = endBlockPattern.matcher(currentLine);
+
+						if (endBlockMatcher.find()) {
+
+							blockTest.append(currentLine);
+
+							break;
+
+						}
+
+						blockTest.append(currentLine);
+
+					}
+
+					sunshineList.add(createRecord(blockTest.toString()));
+
+					blockTest.setLength(0);
+
+				}
 				
 			}
 
@@ -83,7 +112,48 @@ class ParseFile implements RecordLoader {
 
 	private Record createRecord(String currentBlock) {
 
-		
+		Record newUser = new Record();
+
+		Matcher codeBlockMatcher = codeBlockPattern.matcher(currentBlock);
+
+		if (codeBlockMatcher.find()) {
+
+			newUser.employer = codeBlockMatcher.group(1);
+
+			String lastName = codeBlockMatcher.group(2);
+
+			String firstName = codeBlockMatcher.group(3);
+
+			newUser.name = lastName + ", " + firstName;
+
+			newUser.position = codeBlockMatcher.group(4);
+
+
+			String salaryString = codeBlockMatcher.group(5);
+
+			salaryString = salaryString.replace("$", "");
+
+			salaryString = salaryString.replace(",", "");
+
+			newUser.salary = Float.parseFloat(salaryString);
+
+			newUser.sector = ""; //TODO
+
+		} else {
+
+			float tempSalary = 0;
+
+			newUser.employer = "FAILED";
+			newUser.name = "FAILED";
+			newUser.position = "FAILED";
+			newUser.salary = tempSalary; //TODO
+			newUser.sector = "FAILEd"; //TODO
+
+
+		}
+
+		return newUser;
+
 
 	}
 
