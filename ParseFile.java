@@ -9,19 +9,22 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
-	private String employerRegexEN = "([A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáéíóúô'’\\. ]+)";
+	//temp var
+	private int NumberOfFailedRecords = 0;
 
-	private String employerRegexFR = "[A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáéíóúô'’\\. ]+"; 
+	private String employerRegexEN = "([A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáàéíóúô;'’\\. ]+)";
 
-	private String lastNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?";
+	private String employerRegexFR = "[A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáàéíóúô;'’\\. ]+"; 
 
-	private String firstNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ'’\\.\\(\\) ]+);?"; 
+	private String lastNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ;'’\\.\\(\\) ]+);?";
+
+	private String firstNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ;'’\\.\\(\\) ]+);?"; 
 
 	private String positionRegex = "([A-Za-z&,\\-/áéíóúô'’\\. ]+)";
 
 	private String salaryRegex = "(\\$\\d?,?\\d{3,},\\d{3,}.\\d{2})"; 
 
-	private String taxRegex = "(\\$\\d+.\\d{2})"; 
+	private String taxRegex = "(\\$\\d?\\d?,?\\d+.\\d{2})"; 
 
 	private String codeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
 		+ employerRegexEN 
@@ -42,8 +45,12 @@ class ParseFile implements RecordLoader {
 
 	private Pattern codeBlockPattern = Pattern.compile(codeBlockRegex);
 
+	private String sectorRegex = "<h1> Public Sector Salary Disclosure for 2013: Government of Ontario : ([A-Za-z ]+)</h1>";
+
 	private String startBlockRegex = "\\s*<tr>\\s*";
 	private String endBlockRegex = "\\s*<\\/tr>\\s*";
+
+	private String currentSector = "VOID";
 	
 	public List<Record> load(String filename) throws Exception {
 
@@ -60,13 +67,25 @@ class ParseFile implements RecordLoader {
 
 			Pattern endBlockPattern = Pattern.compile(endBlockRegex);
 
-			Matcher startBlockMatcher, endBlockMatcher;
+			Pattern sectorPattern = Pattern.compile(sectorRegex);
+
+			Matcher startBlockMatcher, endBlockMatcher, sectorMatcher;
 
 			StringBuilder blockTest = new StringBuilder();
 
 			String currentLine = "";
 
 			while ((currentLine = inputFile.readLine()) != null) {
+
+				sectorMatcher = sectorPattern.matcher(currentLine);
+
+				if (sectorMatcher.find()) {
+
+					currentSector = sectorMatcher.group(1);
+
+					continue;
+
+				}
 
 				startBlockMatcher = startBlockPattern.matcher(currentLine);						
 
@@ -108,7 +127,8 @@ class ParseFile implements RecordLoader {
 
 		}
 
-
+		System.out.print("THE NUMBER OF FAILED RECORDS IS: ");
+		System.out.println(NumberOfFailedRecords);
 		return sunshineList;
 
 	}
@@ -140,7 +160,7 @@ class ParseFile implements RecordLoader {
 
 			newUser.salary = Float.parseFloat(salaryString);
 
-			newUser.sector = ""; //TODO
+			newUser.sector = currentSector; //TODO
 
 		} else {
 
@@ -150,7 +170,10 @@ class ParseFile implements RecordLoader {
 			newUser.name = "FAILED";
 			newUser.position = "FAILED";
 			newUser.salary = tempSalary; //TODO
-			newUser.sector = "FAILEd"; //TODO
+			newUser.sector = currentSector; //TODO
+
+			//temp var
+			NumberOfFailedRecords++;
 
 
 		}
