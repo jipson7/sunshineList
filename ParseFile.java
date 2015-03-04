@@ -28,9 +28,7 @@ class ParseFile implements RecordLoader {
 
 	private String codeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
 		+ employerRegexEN 
-		+ "<\\/span>\\s*<span lang=\"fr_ca\">&nbsp;\\/&nbsp;\\s*" 
-		+ employerRegexFR
-		+ "<\\/span><\\/td>\\s*<td align=\"left\" valign=\"top\">" 
+		+ "<\\/span>\\s*.*\\s*.*?\\s*?<td align=\"left\" valign=\"top\">" 
 		+ lastNameRegex
 		+ "<\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
 		+ firstNameRegex
@@ -45,7 +43,7 @@ class ParseFile implements RecordLoader {
 
 	private Pattern codeBlockPattern = Pattern.compile(codeBlockRegex);
 
-	private String sectorRegex = "<h1> Public Sector Salary Disclosure for 2013: Government of Ontario : ([A-Za-z ]+)</h1>";
+	private String sectorRegex = "<h1> Public Sector Salary Disclosure for 2013: ([A-Za-z: ]+)</h1>";
 
 	private String startBlockRegex = "\\s*<tr>\\s*";
 	private String endBlockRegex = "\\s*<\\/tr>\\s*";
