@@ -53,8 +53,6 @@ class ParseFile implements RecordLoader {
 
 		List<Record> sunshineList = new ArrayList<Record>();
 
-		System.out.println(codeBlockRegex);
-
 		try {
 
 			BufferedReader inputFile = new BufferedReader(new FileReader(filename));			
@@ -147,7 +145,11 @@ class ParseFile implements RecordLoader {
 
 			String firstName = codeBlockMatcher.group(6);
 
-			newUser.name = lastName + ", " + firstName;
+			String nameToAdd = lastName + ", " + firstName;
+
+			nameToAdd = nameToAdd.replace("  ", " ");
+
+			newUser.name = nameToAdd;
 
 			newUser.position = codeBlockMatcher.group(7);
 
@@ -163,6 +165,7 @@ class ParseFile implements RecordLoader {
 
 
 		} else {
+
 
 			return null;
 
