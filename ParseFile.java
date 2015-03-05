@@ -11,6 +11,8 @@ class ParseFile implements RecordLoader {
 
 	private String employerRegexEN = "([A-Za-z&,\\-/;'’\\. ]+)";
 
+	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+";
+
 	private String lastNameRegex = "([A-Za-z&\\-;'’\\.\\(\\)_ ]+);?";
 
 	private String firstNameRegex = "([A-Za-z&\\-;'’\\.\\(\\) ]+);?"; 
@@ -23,7 +25,9 @@ class ParseFile implements RecordLoader {
 
 	private String codeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
 		+ employerRegexEN 
-		+ "<\\/span>\\s*.*\\s*.*?\\s*?<td align=\"left\" valign=\"top\">" 
+		+ "<\\/span>\\s*<span lang=\"fr_ca\">&nbsp;\\/&nbsp;\\s*"
+		+ employerRegexFR
+		+ "<\\/span><\\/td>\\s*<td align=\"left\" valign=\"top\">" 
 		+ lastNameRegex
 		+ "<\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
 		+ firstNameRegex
