@@ -16,8 +16,12 @@ public class parseDriver {
 
 			for (Record x : sunshineList) {
 
-				System.out.println(x.name + ", " + Float.toString(x.salary) 
-						+ ", " + x.position + ", " + x.employer + ", " + x.sector);
+				if (x != null) {
+
+					System.out.println(x.name + ", " + Float.toString(x.salary) 
+							+ ", " + x.position + ", " + x.employer + ", " + x.sector);
+
+				}
 
 			}
 

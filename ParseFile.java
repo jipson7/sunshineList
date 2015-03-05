@@ -12,15 +12,15 @@ class ParseFile implements RecordLoader {
 	//temp var
 	private int NumberOfFailedRecords = 0;
 
-	private String employerRegexEN = "([A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáàéíóúô;'’\\. ]+)";
+	private String employerRegexEN = "([A-Za-z&,\\-/;'’\\. ]+)";
 
-	private String employerRegexFR = "[A-Za-z&,\\-/ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜáàéíóúô;'’\\. ]+"; 
+	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+"; 
 
-	private String lastNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ;'’\\.\\(\\) ]+);?";
+	private String lastNameRegex = "([A-Za-z&\\-;'’\\.\\(\\) ]+);?";
 
-	private String firstNameRegex = "([A-Za-z&\\-ÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜ;'’\\.\\(\\) ]+);?"; 
+	private String firstNameRegex = "([A-Za-z&\\-;'’\\.\\(\\) ]+);?"; 
 
-	private String positionRegex = "([A-Za-z&,\\-/áéíóúô'’\\. ]+)";
+	private String positionRegex = "([A-Za-z&,\\-/'’\\. ]+)";
 
 	private String salaryRegex = "(\\$\\d?,?\\d{3,},\\d{3,}.\\d{2})"; 
 
@@ -162,16 +162,10 @@ class ParseFile implements RecordLoader {
 
 		} else {
 
-			float tempSalary = 0;
-
-			newUser.employer = "FAILED";
-			newUser.name = "FAILED";
-			newUser.position = "FAILED";
-			newUser.salary = tempSalary; //TODO
-			newUser.sector = currentSector; //TODO
-
 			//temp var
 			NumberOfFailedRecords++;
+
+			return null;
 
 
 		}
