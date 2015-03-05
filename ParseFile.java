@@ -12,7 +12,7 @@ class ParseFile implements RecordLoader {
 	//temp
 	private int NumberOfFailedRecords = 0;
 
-	private String employerRegexEN = "([A-Za-z&,\\-/;'’\\. ]+)";
+	private String employerRegexEN = "([A-Za-z0-9&,\\-/;'’\\.\\(\\) ]+)";
 
 	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+";
 
@@ -42,21 +42,15 @@ class ParseFile implements RecordLoader {
 		+ taxRegex
 		+ "<\\/td>\\s*<\\/tr>\\s*";
 
-	private String secondCodeBlockRegex = "<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
-		+ lastNameRegex
-		+ "<\\/td>\\s*<td align=\"left\" valign=\"top\">" 
-		+ firstNameRegex
-		+ "<\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
+	private String secondCodeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
 		+ employerRegexEN
-		+ "<\\/td>\\s*<td align=\"left\" valign=\"top\">" 
-		+ employerRegexEN
-		+ "\\/<span lang=\"fr_ca\">" 
-		+ employerRegexFR
 		+ "<\\/span>\\s*<\\/td>\\s*<td align=\"left\" valign=\"top\">" 
-		+ positionRegex
-		+ "\\/<span lang=\"fr_ca\">" 
-		+ employerRegexFR
-		+ "<\\/span>\\s*<\\/td>\\s*<td align=\"right\" valign=\"top\">" 
+		+ lastNameRegex
+		+ "<\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
+		+ firstNameRegex 
+		+ "<\\/td>\\s*<td align=\"left\" valign=\"top\"><span lang=\"en\">\\s*?" 
+		+ positionRegex 
+		+ "<\\/span><\\/td>\\s*<td align=\"right\" valign=\"top\">" 
 		+ salaryRegex
 		+ "<\\/td>\\s*<td colspan=\"2\" align=\"right\" valign=\"top\">" 
 		+ taxRegex
@@ -193,9 +187,11 @@ class ParseFile implements RecordLoader {
 
 			if (secondCodeBlockMatcher.find()) {
 
-				String lastName = secondCodeBlockMatcher.group(1);
+				newUser.employer = secondCodeBlockMatcher.group(1);
 
-				String firstName = secondCodeBlockMatcher.group(2);
+				String lastName = secondCodeBlockMatcher.group(2);
+
+				String firstName = secondCodeBlockMatcher.group(3);
 
 				String nameToAdd = lastName + ", " + firstName;
 
@@ -203,13 +199,12 @@ class ParseFile implements RecordLoader {
 
 				newUser.name = nameToAdd;
 
-				newUser.employer = secondCodeBlockMatcher.group(3);
+				newUser.position = secondCodeBlockMatcher.group(4);
 
-				newUser.sector = secondCodeBlockMatcher.group(4);
+				newUser.salary = convertSalaryToFloat(secondCodeBlockMatcher.group(5));
 
-				newUser.position = secondCodeBlockMatcher.group(5);
+				newUser.sector = currentSector;
 			
-				newUser.salary = convertSalaryToFloat(secondCodeBlockMatcher.group(6));
 	
 				
 			} else {
