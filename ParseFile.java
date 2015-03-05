@@ -9,9 +9,6 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
-	//temp
-	private int NumberOfFailedRecords = 0;
-
 	private String employerRegexEN = "([A-Za-z0-9&,\\-/;'’\\.\\(\\) ]+)";
 
 	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+";
@@ -56,10 +53,34 @@ class ParseFile implements RecordLoader {
 		+ taxRegex
 		+ "<\\/td>\\s*<\\/tr>\\s*";
 
+	private String addendaURL = "<a href='\\/en\\/publications\\/salarydisclosure\\/2014\\/addenda_14.html#[A-Za-z\\- ]+'>";
+
+	private String thirdCodeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
+		+ addendaURL 
+		+ employerRegexEN 
+		+ "<\\/span>\\s*<\\/td>\\s*<td align=\"left\" valign=\"top\">" 
+		+ addendaURL
+		+ lastNameRegex 
+		+ "<\\/a><\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
+		+ addendaURL 
+		+ firstNameRegex 
+		+ "<\\/a><\\/td>\\s*<td align=\"left\" valign=\"top\"><span lang=\"en\">\\s*" 
+		+ addendaURL 
+		+ positionRegex 
+		+ "<\\/span><\\/td>\\s*<td align=\"right\" valign=\"top\">" 
+		+ addendaURL 
+		+ salaryRegex 
+		+ "<\\/a><\\/td>\\s*<td colspan=\"2\" align=\"right\" valign=\"top\">" 
+		+ addendaURL 
+		+ taxRegex 
+		+ "<\\/a><\\/td>\\s*<\\/tr>";
+
 
 	private Pattern codeBlockPattern = Pattern.compile(codeBlockRegex);
 
 	private Pattern secondCodeBlockPattern = Pattern.compile(secondCodeBlockRegex);
+
+	private Pattern thirdCodeBlockPattern = Pattern.compile(thirdCodeBlockRegex);
 
 	private String sectorRegex = "<h1> Public Sector Salary Disclosure for 2013: ([A-Za-z: ]+)</h1>";
 
@@ -71,8 +92,6 @@ class ParseFile implements RecordLoader {
 	public List<Record> load(String filename) throws Exception {
 
 		List<Record> sunshineList = new ArrayList<Record>();
-
-		System.out.println(secondCodeBlockRegex);
 
 		try {
 
@@ -148,8 +167,6 @@ class ParseFile implements RecordLoader {
 
 		}
 
-		System.out.println("The number of failed records is : " + NumberOfFailedRecords);
-
 		return sunshineList;
 
 	}
@@ -164,15 +181,7 @@ class ParseFile implements RecordLoader {
 
 			newUser.employer = codeBlockMatcher.group(1);
 
-			String lastName = codeBlockMatcher.group(5);
-
-			String firstName = codeBlockMatcher.group(6);
-
-			String nameToAdd = lastName + ", " + firstName;
-
-			nameToAdd = nameToAdd.replace("  ", " ");
-
-			newUser.name = nameToAdd;
+			newUser.name = buildNameString(codeBlockMatcher.group(5), codeBlockMatcher.group(6));
 
 			newUser.position = codeBlockMatcher.group(7);
 
@@ -185,19 +194,13 @@ class ParseFile implements RecordLoader {
 
 			Matcher secondCodeBlockMatcher = secondCodeBlockPattern.matcher(currentBlock);
 
+			Matcher thirdCodeBlockMatcher = thirdCodeBlockPattern.matcher(currentBlock);
+
 			if (secondCodeBlockMatcher.find()) {
 
 				newUser.employer = secondCodeBlockMatcher.group(1);
 
-				String lastName = secondCodeBlockMatcher.group(2);
-
-				String firstName = secondCodeBlockMatcher.group(3);
-
-				String nameToAdd = lastName + ", " + firstName;
-
-				nameToAdd = nameToAdd.replace("  ", " ");
-
-				newUser.name = nameToAdd;
+				newUser.name = buildNameString(secondCodeBlockMatcher.group(2), secondCodeBlockMatcher.group(3));
 
 				newUser.position = secondCodeBlockMatcher.group(4);
 
@@ -207,14 +210,23 @@ class ParseFile implements RecordLoader {
 			
 	
 				
+			} else if (thirdCodeBlockMatcher.find()) {
+
+				newUser.employer = thirdCodeBlockMatcher.group(1);
+
+				newUser.name = buildNameString(thirdCodeBlockMatcher.group(2), thirdCodeBlockMatcher.group(3));
+
+				newUser.position = thirdCodeBlockMatcher.group(4);
+
+				newUser.salary = convertSalaryToFloat(thirdCodeBlockMatcher.group(5));
+
+				newUser.sector = currentSector;
+
+
+
 			} else {
 
-				System.out.println("Error : " + currentBlock);
-
-				NumberOfFailedRecords++;	
-
 				return null;
-
 			}
 
 		}
@@ -229,6 +241,16 @@ class ParseFile implements RecordLoader {
 			salaryString = salaryString.replace("$", "");
 			salaryString = salaryString.replace(",", "");
 			return Float.parseFloat(salaryString);
+
+	}
+
+	private String buildNameString(String lastName, String firstName) {
+
+		String nameToAdd = lastName + ", " + firstName;
+
+		nameToAdd = nameToAdd.replace("  ", " ");
+
+		return nameToAdd;
 
 	}
 
