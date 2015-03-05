@@ -9,6 +9,9 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
+	//temp
+	private int NumberOfFailedRecords = 0;
+
 	private String employerRegexEN = "([A-Za-z&,\\-/;'’\\. ]+)";
 
 	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+";
@@ -39,8 +42,30 @@ class ParseFile implements RecordLoader {
 		+ taxRegex
 		+ "<\\/td>\\s*<\\/tr>\\s*";
 
+	private String secondCodeBlockRegex = "<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
+		+ lastNameRegex
+		+ "<\\/td>\\s*<td align=\"left\" valign=\"top\">" 
+		+ firstNameRegex
+		+ "<\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
+		+ employerRegexEN
+		+ "<\\/td>\\s*<td align=\"left\" valign=\"top\">" 
+		+ employerRegexEN
+		+ "\\/<span lang=\"fr_ca\">" 
+		+ employerRegexFR
+		+ "<\\/span>\\s*<\\/td>\\s*<td align=\"left\" valign=\"top\">" 
+		+ positionRegex
+		+ "\\/<span lang=\"fr_ca\">" 
+		+ employerRegexFR
+		+ "<\\/span>\\s*<\\/td>\\s*<td align=\"right\" valign=\"top\">" 
+		+ salaryRegex
+		+ "<\\/td>\\s*<td colspan=\"2\" align=\"right\" valign=\"top\">" 
+		+ taxRegex
+		+ "<\\/td>\\s*<\\/tr>\\s*";
+
 
 	private Pattern codeBlockPattern = Pattern.compile(codeBlockRegex);
+
+	private Pattern secondCodeBlockPattern = Pattern.compile(secondCodeBlockRegex);
 
 	private String sectorRegex = "<h1> Public Sector Salary Disclosure for 2013: ([A-Za-z: ]+)</h1>";
 
@@ -52,6 +77,8 @@ class ParseFile implements RecordLoader {
 	public List<Record> load(String filename) throws Exception {
 
 		List<Record> sunshineList = new ArrayList<Record>();
+
+		System.out.println(secondCodeBlockRegex);
 
 		try {
 
@@ -127,6 +154,8 @@ class ParseFile implements RecordLoader {
 
 		}
 
+		System.out.println("The number of failed records is : " + NumberOfFailedRecords);
+
 		return sunshineList;
 
 	}
@@ -153,26 +182,58 @@ class ParseFile implements RecordLoader {
 
 			newUser.position = codeBlockMatcher.group(7);
 
-			String salaryString = codeBlockMatcher.group(8);
-
-			salaryString = salaryString.replace("$", "");
-
-			salaryString = salaryString.replace(",", "");
-
-			newUser.salary = Float.parseFloat(salaryString);
+			newUser.salary = convertSalaryToFloat(codeBlockMatcher.group(8));
 
 			newUser.sector = currentSector;
 
 
 		} else {
 
+			Matcher secondCodeBlockMatcher = secondCodeBlockPattern.matcher(currentBlock);
 
-			return null;
+			if (secondCodeBlockMatcher.find()) {
+
+				String lastName = secondCodeBlockMatcher.group(1);
+
+				String firstName = secondCodeBlockMatcher.group(2);
+
+				String nameToAdd = lastName + ", " + firstName;
+
+				nameToAdd = nameToAdd.replace("  ", " ");
+
+				newUser.name = nameToAdd;
+
+				newUser.employer = secondCodeBlockMatcher.group(3);
+
+				newUser.sector = secondCodeBlockMatcher.group(4);
+
+				newUser.position = secondCodeBlockMatcher.group(5);
+			
+				newUser.salary = convertSalaryToFloat(secondCodeBlockMatcher.group(6));
+	
+				
+			} else {
+
+				System.out.println("Error : " + currentBlock);
+
+				NumberOfFailedRecords++;	
+
+				return null;
+
+			}
 
 		}
 
 		return newUser;
 
+
+	}
+
+	private float convertSalaryToFloat(String salaryString) {
+
+			salaryString = salaryString.replace("$", "");
+			salaryString = salaryString.replace(",", "");
+			return Float.parseFloat(salaryString);
 
 	}
 
