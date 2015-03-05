@@ -9,12 +9,7 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
-	//temp var
-	private int NumberOfFailedRecords = 0;
-
 	private String employerRegexEN = "([A-Za-z&,\\-/;'’\\. ]+)";
-
-	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+"; 
 
 	private String lastNameRegex = "([A-Za-z&\\-;'’\\.\\(\\)_ ]+);?";
 
@@ -51,9 +46,6 @@ class ParseFile implements RecordLoader {
 	private String currentSector = "VOID";
 	
 	public List<Record> load(String filename) throws Exception {
-
-		//temp to check regex
-		System.out.println(codeBlockRegex);
 
 		List<Record> sunshineList = new ArrayList<Record>();
 
@@ -107,7 +99,13 @@ class ParseFile implements RecordLoader {
 
 					}
 
-					sunshineList.add(createRecord(blockTest.toString()));
+					Record recordToAdd = createRecord(blockTest.toString());
+
+					if (recordToAdd != null) {
+
+						sunshineList.add(recordToAdd);
+
+					}
 
 					blockTest.setLength(0);
 
@@ -125,8 +123,6 @@ class ParseFile implements RecordLoader {
 
 		}
 
-		System.out.print("THE NUMBER OF FAILED RECORDS IS: ");
-		System.out.println(NumberOfFailedRecords);
 		return sunshineList;
 
 	}
@@ -147,10 +143,7 @@ class ParseFile implements RecordLoader {
 
 			newUser.name = lastName + ", " + firstName;
 
-			System.out.print(newUser.name);
-
 			newUser.position = codeBlockMatcher.group(4);
-
 
 			String salaryString = codeBlockMatcher.group(5);
 
@@ -160,17 +153,12 @@ class ParseFile implements RecordLoader {
 
 			newUser.salary = Float.parseFloat(salaryString);
 
-			newUser.sector = currentSector; //TODO
+			newUser.sector = currentSector;
 
-			System.out.println(newUser.sector);
 
 		} else {
 
-			//temp var
-			NumberOfFailedRecords++;
-
 			return null;
-
 
 		}
 
