@@ -16,15 +16,15 @@ class ParseFile implements RecordLoader {
 
 	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+"; 
 
-	private String lastNameRegex = "([A-Za-z&\\-;'’\\.\\(\\) ]+);?";
+	private String lastNameRegex = "([A-Za-z&\\-;'’\\.\\(\\)_ ]+);?";
 
 	private String firstNameRegex = "([A-Za-z&\\-;'’\\.\\(\\) ]+);?"; 
 
-	private String positionRegex = "([A-Za-z&,\\-/'’\\. ]+)";
+	private String positionRegex = "([A-Za-z0-9:;&#\",\\-/'’\\.\\(\\)\\s\\\\`\\+ ]+)";
 
 	private String salaryRegex = "(\\$\\d?,?\\d{3,},\\d{3,}.\\d{2})"; 
 
-	private String taxRegex = "(\\$\\d?\\d?,?\\d+.\\d{2})"; 
+	private String taxRegex = "(\\$\\d?\\d?\\d?,?\\d+.\\d{2})"; 
 
 	private String codeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
 		+ employerRegexEN 
@@ -147,6 +147,8 @@ class ParseFile implements RecordLoader {
 
 			newUser.name = lastName + ", " + firstName;
 
+			System.out.print(newUser.name);
+
 			newUser.position = codeBlockMatcher.group(4);
 
 
@@ -159,6 +161,8 @@ class ParseFile implements RecordLoader {
 			newUser.salary = Float.parseFloat(salaryString);
 
 			newUser.sector = currentSector; //TODO
+
+			System.out.println(newUser.sector);
 
 		} else {
 
