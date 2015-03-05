@@ -115,7 +115,7 @@ class ParseFile implements RecordLoader {
 
 				if (sectorMatcher.find()) {
 
-					currentSector = sectorMatcher.group(1);
+					currentSector = sectorMatcher.group(1).trim();
 
 					continue;
 
@@ -179,11 +179,11 @@ class ParseFile implements RecordLoader {
 
 		if (codeBlockMatcher.find()) {
 
-			newUser.employer = codeBlockMatcher.group(1);
+			newUser.employer = codeBlockMatcher.group(1).trim();
 
 			newUser.name = buildNameString(codeBlockMatcher.group(5), codeBlockMatcher.group(6));
 
-			newUser.position = codeBlockMatcher.group(7);
+			newUser.position = codeBlockMatcher.group(7).trim();
 
 			newUser.salary = convertSalaryToFloat(codeBlockMatcher.group(8));
 
@@ -198,11 +198,14 @@ class ParseFile implements RecordLoader {
 
 			if (secondCodeBlockMatcher.find()) {
 
-				newUser.employer = secondCodeBlockMatcher.group(1);
+				newUser.employer = secondCodeBlockMatcher.group(1).trim();
 
 				newUser.name = buildNameString(secondCodeBlockMatcher.group(2), secondCodeBlockMatcher.group(3));
 
-				newUser.position = secondCodeBlockMatcher.group(4);
+				//TODO
+				//implement a way to split the french and english jobs in this block (separated by a dash)
+
+				newUser.position = secondCodeBlockMatcher.group(4).trim();
 
 				newUser.salary = convertSalaryToFloat(secondCodeBlockMatcher.group(5));
 
@@ -212,11 +215,11 @@ class ParseFile implements RecordLoader {
 				
 			} else if (thirdCodeBlockMatcher.find()) {
 
-				newUser.employer = thirdCodeBlockMatcher.group(1);
+				newUser.employer = thirdCodeBlockMatcher.group(1).trim();
 
 				newUser.name = buildNameString(thirdCodeBlockMatcher.group(2), thirdCodeBlockMatcher.group(3));
 
-				newUser.position = thirdCodeBlockMatcher.group(4);
+				newUser.position = thirdCodeBlockMatcher.group(4).trim();
 
 				newUser.salary = convertSalaryToFloat(thirdCodeBlockMatcher.group(5));
 
@@ -240,7 +243,7 @@ class ParseFile implements RecordLoader {
 
 			salaryString = salaryString.replace("$", "");
 			salaryString = salaryString.replace(",", "");
-			return Float.parseFloat(salaryString);
+			return Float.parseFloat(salaryString.trim());
 
 	}
 
@@ -248,7 +251,7 @@ class ParseFile implements RecordLoader {
 
 		String nameToAdd = lastName + ", " + firstName;
 
-		nameToAdd = nameToAdd.replace("  ", " ");
+		nameToAdd = nameToAdd.replace("  ", " ").trim();
 
 		return nameToAdd;
 
