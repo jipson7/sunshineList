@@ -25,9 +25,9 @@ class ParseFile implements RecordLoader {
 
 	private String codeBlockRegex = "\\s*<tr>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\"><span lang=\"en\">" 
 		+ employerRegexEN 
-		+ "<\\/span>\\s*<span lang=\"fr_ca\">&nbsp;\\/&nbsp;\\s*"
+		+ "<\\/span>\\s*((<span lang=\"fr_ca\">&nbsp;/&nbsp;\\s*"
 		+ employerRegexFR
-		+ "<\\/span><\\/td>\\s*<td align=\"left\" valign=\"top\">" 
+		+ "</span></td>)|(</td>))\\s*<td align=\"left\" valign=\"top\">" 
 		+ lastNameRegex
 		+ "<\\/td>\\s*<td colspan=\"2\" align=\"left\" valign=\"top\">" 
 		+ firstNameRegex
@@ -52,6 +52,8 @@ class ParseFile implements RecordLoader {
 	public List<Record> load(String filename) throws Exception {
 
 		List<Record> sunshineList = new ArrayList<Record>();
+
+		System.out.println(codeBlockRegex);
 
 		try {
 
@@ -141,15 +143,15 @@ class ParseFile implements RecordLoader {
 
 			newUser.employer = codeBlockMatcher.group(1);
 
-			String lastName = codeBlockMatcher.group(2);
+			String lastName = codeBlockMatcher.group(5);
 
-			String firstName = codeBlockMatcher.group(3);
+			String firstName = codeBlockMatcher.group(6);
 
 			newUser.name = lastName + ", " + firstName;
 
-			newUser.position = codeBlockMatcher.group(4);
+			newUser.position = codeBlockMatcher.group(7);
 
-			String salaryString = codeBlockMatcher.group(5);
+			String salaryString = codeBlockMatcher.group(8);
 
 			salaryString = salaryString.replace("$", "");
 
