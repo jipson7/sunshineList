@@ -14,6 +14,19 @@ java Top <html-file> <k> <sectors|employers|positions|names>
 
 with parameters:
 
-* <html-file> - The location of the raw html that was pulled with getdata.py
-* <k> - Include the top "k" names on the list
-* <sectors|employers|positions|names> - The category to query
+* &lt;html-file&gt; - The location of the raw html that was pulled with getdata.py, which must be relative to the directory of execution.
+* &lt;k&gt; - Include the top "k" names on the list
+* &lt;sectors|employers|positions|names&gt; - The category to query
+
+Note: The actual execution would have to include the package reference. i.e.
+
+```
+java csci2020u.a3.Top <html-file> <k> <sectors|employers|positions|names>
+```
+
+but this can be changes by changing everything to the default package if desired.
+
+####Sample Output:
+
+![Sample Command Line Use](data/sampleOutput-CLUI.png)
+
