@@ -1,3 +1,5 @@
+package csci2020u.a3;
+
 import java.awt.*;
 import javax.swing.*;
 //Delete this If I end up abtracting the events to the main
@@ -92,6 +94,30 @@ class Pie extends JComponent {
 
 		}
 
+
+	}
+
+	public static void main(String[] args) {
+
+		Map<Float, String> testTree = new TreeMap<Float, String>();
+
+		for (int i = 0; i < 10; i++) {
+
+			testTree.put((float) i, "test");
+
+		}
+
+		JFrame win = new JFrame("PieChart");
+		win.setSize(400, 400);
+		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		Pie pieChart = new Pie();
+
+		pieChart.addPieSlices(testTree);
+
+		win.getContentPane().add(pieChart);
+
+		win.setVisible(true);
 
 	}
 
