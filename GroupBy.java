@@ -46,7 +46,45 @@ class GroupBy implements IGroupBy {
 
 	public void printTopK(int k) {
 
+		Map<Float, String> topList = new TreeMap<Float, String>(Collections.reverseOrder());
 
+		if (currentOrganization == 0) {
+
+			List<Record> temp;
+
+			for (String current : recordMap.keySet()) {
+
+				temp = recordMap.get(current);	
+
+				Float runningTotal = (float) 0;
+
+				for (Record currRecord : temp) {
+
+					runningTotal += currRecord.salary;	
+
+				}
+
+				topList.put(runningTotal, current);
+
+				
+
+			}
+
+		} else if (currentOrganization == 1) {
+
+
+
+		} else if (currentOrganization == 2) {
+
+
+
+		} else if (currentOrganization == 3) {
+
+
+
+		}
+
+		printKeyValuePairs(topList, k);
 
 	}
 
@@ -143,6 +181,22 @@ class GroupBy implements IGroupBy {
 	private void createMapName() {
 
 		currentOrganization = 3;	
+
+	}
+
+	private void printKeyValuePairs(Map<Float, String> mapToPrint, int topNum) {
+
+		int counter = 0;
+
+		for (Map.Entry<Float, String> entry : mapToPrint.entrySet()) {
+
+			System.out.printf("%60s : $%,.2f \n", entry.getValue(), entry.getKey());
+
+			counter++;
+
+			if (counter >= topNum) { break; }
+
+		}				
 
 	}
 }
