@@ -9,6 +9,8 @@ import java.util.*;
 
 class ParseFile implements RecordLoader {
 
+	long currentID = 0;
+
 	private String employerRegexEN = "([A-Za-z0-9&,\\-/;'’\\.\\(\\) ]+)";
 
 	private String employerRegexFR = "[A-Za-z&,\\-/;'’\\. ]+";
@@ -189,6 +191,8 @@ class ParseFile implements RecordLoader {
 
 			newUser.sector = currentSector;
 
+			newUser.id = (++currentID);
+
 
 		} else {
 
@@ -202,16 +206,14 @@ class ParseFile implements RecordLoader {
 
 				newUser.name = buildNameString(secondCodeBlockMatcher.group(2), secondCodeBlockMatcher.group(3));
 
-				//TODO
-				//implement a way to split the french and english jobs in this block (separated by a dash)
-
 				newUser.position = secondCodeBlockMatcher.group(4).trim();
 
 				newUser.salary = convertSalaryToFloat(secondCodeBlockMatcher.group(5));
 
 				newUser.sector = currentSector;
+
+				newUser.id = (++currentID);
 			
-	
 				
 			} else if (thirdCodeBlockMatcher.find()) {
 
@@ -225,7 +227,7 @@ class ParseFile implements RecordLoader {
 
 				newUser.sector = currentSector;
 
-
+				newUser.id = (++currentID);
 
 			} else {
 

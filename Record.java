@@ -6,4 +6,5 @@ class Record {
     String name; // lastname, firstname
     String position;
     float  salary;
+	long id;
 }
