@@ -21,22 +21,28 @@ class GroupBy implements IGroupBy {
 		if (byAttribute == 0) {
 
 			createMapSector();
+
+			currentOrganization = 0;
 			
 		} else if (byAttribute == 1) {
 
 			createMapEmployer();
 
+			currentOrganization = 1;
+
 		} else if (byAttribute == 2) {
 
 			createMapPosition();
 
+			currentOrganization = 2;
+
 		} else if (byAttribute == 3) {
 
-			createMapName();
+			currentOrganization = 3;	
 
 		} else {
 
-			System.out.println("Invalid Selection");
+			System.err.println("Invalid Selection");
 
 			System.exit(1);
 
@@ -48,7 +54,7 @@ class GroupBy implements IGroupBy {
 
 		Map<Float, String> topList = new TreeMap<Float, String>(Collections.reverseOrder());
 
-		if (currentOrganization == 0) {
+		if (currentOrganization != 3) {
 
 			List<Record> temp;
 
@@ -62,25 +68,20 @@ class GroupBy implements IGroupBy {
 
 					runningTotal += currRecord.salary;	
 
+
 				}
 
-				topList.put(runningTotal, current);
-
-				
+				topList.put(runningTotal, current);			
 
 			}
 
-		} else if (currentOrganization == 1) {
+		} else {
 
+			for (Record current : records) {
 
+				topList.put(current.salary, current.name);	
 
-		} else if (currentOrganization == 2) {
-
-
-
-		} else if (currentOrganization == 3) {
-
-
+			}
 
 		}
 
@@ -89,8 +90,6 @@ class GroupBy implements IGroupBy {
 	}
 
 	private void createMapSector(){
-
-		currentOrganization = 0;
 
 		recordMap = new HashMap<String, List<Record>>();	
 
@@ -120,8 +119,6 @@ class GroupBy implements IGroupBy {
 
 	private void createMapEmployer() {
 
-		currentOrganization = 1;
-
 		recordMap = new HashMap<String, List<Record>>();	
 
 		String employKey;
@@ -150,8 +147,6 @@ class GroupBy implements IGroupBy {
 
 	private void createMapPosition() {
 
-		currentOrganization = 2;
-
 		recordMap = new HashMap<String, List<Record>>();	
 
 		String posKey;
@@ -175,12 +170,6 @@ class GroupBy implements IGroupBy {
 			}
 
 		}
-
-	}
-
-	private void createMapName() {
-
-		currentOrganization = 3;	
 
 	}
 
