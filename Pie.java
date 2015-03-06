@@ -99,13 +99,17 @@ class Pie extends JComponent {
 
 	public static void main(String[] args) {
 
-		Map<Float, String> testTree = new TreeMap<Float, String>();
+		Map<Float, String> sliceTree = new TreeMap<Float, String>();
 
-		for (int i = 0; i < 10; i++) {
-
-			testTree.put((float) i, "test");
-
-		}
+		sliceTree.put(2238297088f, "Universities");
+		sliceTree.put(1609449984f, "Hydro One and Ontario Power Generation");
+		sliceTree.put(1290382208f, "Government of Ontario: Ministries");
+		sliceTree.put(1256070272f, "Hospitals and Boards of Public Health");
+		sliceTree.put(567345344f, "Other Public Sector Employers");
+		sliceTree.put(472853280f, "Colleges");
+		sliceTree.put(466554752f, "Crown Agencies");
+		sliceTree.put(120456360f, "Government of Ontario: Judiciary");
+		sliceTree.put(31375964f, "Government of Ontario: Legislative Assembly and Offices");
 
 		JFrame win = new JFrame("PieChart");
 		win.setSize(400, 400);
@@ -113,7 +117,7 @@ class Pie extends JComponent {
 
 		Pie pieChart = new Pie();
 
-		pieChart.addPieSlices(testTree);
+		pieChart.addPieSlices(sliceTree);
 
 		win.getContentPane().add(pieChart);
 
