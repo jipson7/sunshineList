@@ -21,7 +21,7 @@ with parameters:
 Note: The actual execution would have to include the package reference. i.e.
 
 ```
-java csci2020u.a3.Top <html-file> <k> <sectors|employers|positions|names>
+java a3.Top <html-file> <k> <sectors|employers|positions|names>
 ```
 
 but this can be changes by changing everything to the default package if desired.

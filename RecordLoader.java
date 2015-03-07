@@ -1,4 +1,4 @@
-package csci2020u.a3;
+package a3;
 
 import java.util.*;
 
