@@ -54,7 +54,7 @@ class Pie extends JComponent {
 	@Override
 	public Dimension getPreferredSize() {
 
-		return new Dimension(400, 400);
+		return new Dimension(800, 400);
 
 	}
 
@@ -88,7 +88,7 @@ class Pie extends JComponent {
 
 			g.setColor(currentSlice.color);
 
-			g.fillArc(area.x, area.y, area.width, area.height, currentAngle, arc);
+			g.fillArc(area.x, area.y, (area.width - 400), area.height, currentAngle, arc);
 
 			currentValue += currentSlice.value;
 
@@ -112,7 +112,7 @@ class Pie extends JComponent {
 		sliceTree.put(31375964f, "Government of Ontario: Legislative Assembly and Offices");
 
 		JFrame win = new JFrame("PieChart");
-		win.setSize(400, 400);
+		win.setSize(800, 400);
 		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		Pie pieChart = new Pie();
