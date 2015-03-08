@@ -2,8 +2,6 @@ package a3;
 
 import java.awt.*;
 import javax.swing.*;
-//Delete this If I end up abtracting the events to the main
-import java.awt.event.*;
 import java.util.*;
 
 
@@ -54,7 +52,7 @@ class Pie extends JComponent {
 	@Override
 	public Dimension getPreferredSize() {
 
-		return new Dimension(800, 400);
+		return new Dimension(400, 400);
 
 	}
 
@@ -88,7 +86,7 @@ class Pie extends JComponent {
 
 			g.setColor(currentSlice.color);
 
-			g.fillArc(area.x, area.y, (area.width - 400), area.height, currentAngle, arc);
+			g.fillArc(area.x, area.y, (area.width), area.height, currentAngle, arc);
 
 			currentValue += currentSlice.value;
 
@@ -98,6 +96,38 @@ class Pie extends JComponent {
 	}
 
 	public static void main(String[] args) {
+
+		JFrame win = new JFrame("PieChart");
+		win.setSize(800, 500);
+		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JPanel global = new JPanel();
+		global.setLayout(new FlowLayout(FlowLayout.TRAILING));
+
+		global.add(createPieContainer());
+		global.add(createLabelContainer());
+		global.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+
+		win.add(global);
+
+		win.setVisible(true);
+
+	}
+
+	static private JPanel createLabelContainer() {
+
+		JPanel rightContainer = new JPanel();
+		rightContainer.setLayout(new BoxLayout(rightContainer, BoxLayout.Y_AXIS));
+
+		JTextField testText = new JTextField("This is a test");
+
+		rightContainer.add(testText);
+
+		return rightContainer;
+
+	}
+
+	static private JPanel createPieContainer() {
 
 		Map<Float, String> sliceTree = new TreeMap<Float, String>();
 
@@ -111,18 +141,19 @@ class Pie extends JComponent {
 		sliceTree.put(120456360f, "Government of Ontario: Judiciary");
 		sliceTree.put(31375964f, "Government of Ontario: Legislative Assembly and Offices");
 
-		JFrame win = new JFrame("PieChart");
-		win.setSize(800, 400);
-		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JPanel leftContainer = new JPanel();
+		//leftContainer.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		Pie pieChart = new Pie();
 
 		pieChart.addPieSlices(sliceTree);
 
-		win.getContentPane().add(pieChart);
+		leftContainer.add(pieChart);
 
-		win.setVisible(true);
+		return leftContainer;
 
 	}
+
+
 
 }
