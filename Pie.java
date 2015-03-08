@@ -97,6 +97,8 @@ class Pie extends JComponent {
 
 	public static void main(String[] args) {
 
+		Pie pieChart = new Pie();
+
 		JFrame win = new JFrame("PieChart");
 		win.setSize(800, 500);
 		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,8 +106,8 @@ class Pie extends JComponent {
 		JPanel global = new JPanel();
 		global.setLayout(new FlowLayout(FlowLayout.TRAILING));
 
-		global.add(createPieContainer());
-		global.add(createLabelContainer());
+		global.add(pieChart.createPieContainer(pieChart));
+		global.add(pieChart.createLabelContainer(pieChart));
 		global.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 
 		win.add(global);
@@ -114,20 +116,36 @@ class Pie extends JComponent {
 
 	}
 
-	static private JPanel createLabelContainer() {
+	private JPanel createLabelContainer(Pie pieChart) {
 
 		JPanel rightContainer = new JPanel();
 		rightContainer.setLayout(new BoxLayout(rightContainer, BoxLayout.Y_AXIS));
 
-		JTextField testText = new JTextField("This is a test");
+		for (int i = 0; i < pieSlices.size(); i++) {
 
-		rightContainer.add(testText);
+			rightContainer.add(pieChart.createSliceLabel(pieSlices.get(i)));
+			rightContainer.add(new JLabel("---------"));
+
+		}
 
 		return rightContainer;
 
 	}
 
-	static private JPanel createPieContainer() {
+	private JLabel createSliceLabel(PieSlice p) {
+
+		JLabel label = new JLabel(p.name);	
+
+		label.setBackground(p.color);
+
+		label.setOpaque(true);
+
+		return label;
+		
+
+	}
+
+	private JPanel createPieContainer(Pie pieChart) {
 
 		Map<Float, String> sliceTree = new TreeMap<Float, String>();
 
@@ -143,8 +161,6 @@ class Pie extends JComponent {
 
 		JPanel leftContainer = new JPanel();
 		//leftContainer.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-		Pie pieChart = new Pie();
 
 		pieChart.addPieSlices(sliceTree);
 
