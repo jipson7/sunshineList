@@ -90,7 +90,7 @@ class ParseFile implements RecordLoader {
 	private String endBlockRegex = "\\s*<\\/tr>\\s*";
 
 	private String currentSector = "VOID";
-	
+
 	public List<Record> load(String filename) throws Exception {
 
 		List<Record> sunshineList = new ArrayList<Record>();

@@ -6,7 +6,7 @@ public class parseDriver {
 
 	public static void main(String[] args) throws Exception {
 
-		String filePath = "csci2020u/a3/data/output.txt";
+		String filePath = "a3/data/output.txt";
 
 		try {
 
