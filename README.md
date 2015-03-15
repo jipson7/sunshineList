@@ -4,7 +4,16 @@ This project is done as an assignment for csci2020u at UOIT
 
 See the [course site](http://leda.science.uoit.ca/teaching/sysdev/assignments/assignment3) for more details.
 
-####Use:
+####Compile:
+
+Top compile everything all at once do
+
+```
+javac -cp "lib/*:." *.java
+```
+If you are going to compile them individually only His.java and My.java require that library folder
+
+###Using Top:
 
 The `Top` class is an executable command line tool to query the sunshine list. It sorts the list by category and prints the top results. Its use is as follows.
 
@@ -18,15 +27,42 @@ with parameters:
 * &lt;k&gt; - Include the top "k" names on the list
 * &lt;sectors|employers|positions|names&gt; - The category to query
 
-Note: The actual execution would have to include the package reference. i.e.
-
-```
-java a3.Top <html-file> <k> <sectors|employers|positions|names>
-```
-
-but this can be changes by changing everything to the default package if desired.
 
 ####Sample Output:
 
-![Sample Command Line Use](data/sampleOutput-CLUI.png)
+![Sample Command Line Use](data/sampleOutput-Top.png)
+
+###Using the Visualizations:
+
+####Pie
+
+```
+java Pie
+```
+
+####Sample Output:
+
+![Pie graph of sectors](data/pie.png)
+
+Note: Colors in the pie graph are randomized, If you don't like them, run it again.
+
+####His
+
+```
+java -cp "lib/*:." His
+```
+
+####Sample Output:
+
+![Histogram of Salary Ranges](data/his.png)
+
+####My
+
+```
+java -cp "lib/*:." My
+```
+
+####Sample Output:
+
+![My Visualization](data/my.png)
 
