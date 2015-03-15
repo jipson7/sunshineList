@@ -4,7 +4,7 @@ public class parseDriver {
 
 	public static void main(String[] args) throws Exception {
 
-		String filePath = "a3/data/output.txt";
+		String filePath = "data/output.txt";
 
 		try {
 

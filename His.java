@@ -16,7 +16,7 @@ public class His extends ApplicationFrame {
         final CategoryDataset dataset = createDataset();
         final JFreeChart chart = createChart(dataset);
         final ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(500, 270));
+        chartPanel.setPreferredSize(new Dimension(1200, 1000));
         setContentPane(chartPanel);
 
     }
@@ -25,13 +25,13 @@ public class His extends ApplicationFrame {
 
     	ParseFile parser = new ParseFile();
 
-		TreeMap<Integer, Integer> histogramData = new TreeMap<Integer, Integer>(Collections.reverseOrder());
+		TreeMap<Integer, Integer> histogramData = new TreeMap<Integer, Integer>();
 
 		int binSize = 17;
 		
 		try {
 
-			java.util.List<Record> personList = parser.load("a3/data/output.txt");
+			java.util.List<Record> personList = parser.load("data/output.txt");
 
 
 			for (int i = 100 + binSize; i <= 1800; i = i + binSize) {
@@ -79,11 +79,20 @@ public class His extends ApplicationFrame {
     private CategoryDataset createDataset() {
         
         DefaultCategoryDataset hisData = new DefaultCategoryDataset();
+
+		TreeMap<Integer, Integer> rawData = parseData();
+
+		for(Map.Entry<Integer, Integer> entry : rawData.entrySet()) {
+			Integer key = entry.getKey();
+			Integer value = entry.getValue();
+
+			String currLabel = Integer.toString(key - 17) + " - " + Integer.toString(key);
+
+			hisData.setValue(value, "amount", currLabel);
+
+		}	
         
-        hisData.setValue(20000, "amount", "January"); 
-        hisData.setValue(17500, "amount", "February");
-        hisData.setValue(23000, "amount", "March");        
-        return hisData;
+		return hisData;
         
     }
     
