@@ -1,5 +1,3 @@
-package a3;
-
 class Record {
     String sector;
     String employer;

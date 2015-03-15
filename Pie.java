@@ -1,5 +1,3 @@
-package a3;
-
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;

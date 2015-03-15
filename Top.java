@@ -1,5 +1,3 @@
-package a3;
-
 import java.util.*;
 
 public class Top {
