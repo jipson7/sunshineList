@@ -4,6 +4,7 @@ javaTestFiles/
 ### Big Data Files ###
 data/output.txt
 data/output.txt.backup
+lib/
 
 ### Vim ###
 [._]*.s[a-w][a-z]
