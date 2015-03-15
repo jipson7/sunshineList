@@ -26,13 +26,15 @@ public class His extends ApplicationFrame {
     	ParseFile parser = new ParseFile();
 
 		TreeMap<Integer, Integer> histogramData = new TreeMap<Integer, Integer>(Collections.reverseOrder());
+
+		int binSize = 17;
 		
 		try {
 
 			java.util.List<Record> personList = parser.load("a3/data/output.txt");
 
 
-			for (int i = 125; i <= 1800; i = i + 25) {
+			for (int i = 100 + binSize; i <= 1800; i = i + binSize) {
 
 				histogramData.put(i, 0);
 
@@ -42,7 +44,7 @@ public class His extends ApplicationFrame {
 
 				int currentSalary = (int) person.salary / 1000;
 
-				for (int i = 125; i <= 1800; i = i + 25) {
+				for (int i = 100 + binSize; i <= 1800; i = i + binSize) {
 
 					if (currentSalary < i) {
 
