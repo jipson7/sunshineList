@@ -13,7 +13,7 @@ Top compile everything all at once do
 ```
 javac -cp "lib/*:." *.java
 ```
-If you are going to compile them individually only His.java and My.java require that library folder
+If you are going to compile them individually only His.java requires the library folder
 
 ###Using Top:
 
