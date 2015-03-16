@@ -67,7 +67,7 @@ public class His extends ApplicationFrame {
 
 		} catch (Exception e) {
 
-			System.err.println("File load filled");
+			System.err.println("File load failed");
 			System.exit(1);
 
 		}

@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.image.*;
 import java.io.*;
 import java.awt.*;
-
+import java.util.*;
 
 public class My {
 
@@ -32,7 +32,7 @@ public class My {
 
 		try {
 
-			imgInput = ImageIO.read(new File("stick.png"));
+			imgInput = ImageIO.read(new File("data/stick.png"));
 
 		} catch (IOException e) {
 
@@ -52,6 +52,46 @@ public class My {
 
 	}
 
+	private TreeMap<Float, String> pullTopTenEarners() {
+
+		ParseFile parser = new ParseFile();
+
+		TreeMap<Float, String> allEarners = new TreeMap<Float, String>();
+		TreeMap<Float, String> topEarners = new TreeMap<Float, String>(); 
+
+		try {
+
+			java.util.List<Record> personList = parser.load("data/output.txt");
+
+			for (Record x : personList) {
+
+				allEarners.put(x.salary, x.name);
+
+			}
+
+
+			for(Map.Entry<Float, String> entry : allEarners.entrySet()) {
+
+				topEarners.put(entry.getKey(), entry.getValue());
+
+			}
+
+
+
+		} catch (Exception e) {
+
+			System.err.println("File Load Failed");
+			System.exit(1);
+
+		}
+
+		
+		return topEarners;
+
+
+
+	}
+
 
 	public static void main(String[] args) {
 
@@ -63,9 +103,9 @@ public class My {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 
+		TreeMap<Float, String> topTen = driver.pullTopTenEarners();
+
 		ImageIcon img = driver.getScaledImage(0.5f);
-
-
 
 		JLabel imageTest = new JLabel(img);
 
