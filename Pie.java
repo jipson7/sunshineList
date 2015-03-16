@@ -98,7 +98,7 @@ class Pie extends JComponent {
 		Pie pieChart = new Pie();
 
 		JFrame win = new JFrame("PieChart");
-		win.setSize(800, 500);
+		win.setSize(1000, 500);
 		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel global = new JPanel();

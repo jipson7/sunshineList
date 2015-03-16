@@ -2,6 +2,8 @@
 
 This project is done as an assignment for csci2020u at UOIT
 
+Almost all of the tools in this repo require a large data file called `output.txt` to be in the data folder. However it is too large to fit in the repo. Running `getdata.py` with an internet connection will create it for you.
+
 See the [course site](http://leda.science.uoit.ca/teaching/sysdev/assignments/assignment3) for more details.
 
 ####Compile:
