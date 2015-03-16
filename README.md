@@ -61,8 +61,9 @@ java -cp "lib/*:." His
 ####My
 
 ```
-java -cp "lib/*:." My
+java My
 ```
+Shows a stick figure of the top two earners as well as one for the average canadian salary. The area of each figure is directly proportional to their salary.
 
 ####Sample Output:
 
